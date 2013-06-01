@@ -1,7 +1,10 @@
 class DashboardController < ApplicationController
+    include DashboardHelper
     before_filter :authenticate_user!
+
     def index
-            
+       updateMetrics if Dataset.count == 0
+       @set = Dataset.last
     end
 
     def update_events
