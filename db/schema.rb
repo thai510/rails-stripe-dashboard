@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130601195512) do
+ActiveRecord::Schema.define(:version => 20130601220854) do
+
+  create_table "datasets", :force => true do |t|
+    t.integer  "trialing"
+    t.integer  "active"
+    t.integer  "canceled"
+    t.integer  "unpaid"
+    t.integer  "past_due"
+    t.integer  "active_canceled_at_period_end"
+    t.integer  "trialing_canceled_at_period_end"
+    t.integer  "charges_today"
+    t.integer  "amount_charged_today"
+    t.integer  "amount_refunded_today"
+    t.integer  "refunds_today"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
 
   create_table "events", :force => true do |t|
     t.string   "json"

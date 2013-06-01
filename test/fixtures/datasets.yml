@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  trialing: 1
+  active: 1
+  canceled: 1
+  unpaid: 1
+  past_due: 1
+  active_canceled_at_period_end: 1
+  trialing_canceled_at_period_end: 1
+  charges_today: 1
+  amount_charged_today: 1
+  amount_refunded_today: 1
+  refunds_today: 1
+
+two:
+  trialing: 1
+  active: 1
+  canceled: 1
+  unpaid: 1
+  past_due: 1
+  active_canceled_at_period_end: 1
+  trialing_canceled_at_period_end: 1
+  charges_today: 1
+  amount_charged_today: 1
+  amount_refunded_today: 1
+  refunds_today: 1

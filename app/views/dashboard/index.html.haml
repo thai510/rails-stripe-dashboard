@@ -1,0 +1,43 @@
+.row
+  .span8
+    #chart
+    \ 
+  .span4
+    .well
+      %h4
+        Customers
+        %small (total paying)
+      %h2
+        %span{"data-value-key" => "paying_customers"}
+          %small loading...
+    .well
+      %h4
+        Monthly Revenue
+        %small (projected)
+      %h2
+        $
+        %span{"data-value-key" => "monthly_revenue"}
+          %small loading...
+    .well
+      %h4
+        Churns
+        %small (last 31 days)
+      %h2
+        %span{"data-value-key" => "churn_count"}
+          %small loading...
+    .well
+      %h4
+        Churn Rate
+        %small (last 31 days)
+      %h2
+        %span{"data-value-key" => "churn"}>
+          %small loading...
+        \%
+    .well
+      %h4
+        CLV
+        %small (last 31 days)
+      %h2
+        $
+        %span{"data-value-key" => "customer_lifetime_value"}
+          %small loading...

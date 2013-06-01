@@ -7,11 +7,13 @@
         <%= csrf_meta_tags %>
     </head>
     <body>
-    <%= render 'signed_in_bar' %>
-    <% flash.each do |name, msg| %>
-        <%= content_tag :div, msg, id: "flash_#{name}" %>
-    <% end %>
+        <div class="container">
+            <%= render 'layouts/signed_in_bar' %>
+            <% flash.each do |name, msg| %>
+                <%= content_tag :div, msg, id: "flash_#{name}" %>
+            <% end %>
 
-    <%= yield %>
+            <%= yield %>
+        </div>
     </body>
 </html>
