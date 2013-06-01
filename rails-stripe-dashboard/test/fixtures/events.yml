@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  json: MyString
+  event_id: 1
+  livemode: false
+  event_type: MyString
+
+two:
+  json: MyString
+  event_id: 1
+  livemode: false
+  event_type: MyString
