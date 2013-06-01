@@ -1,14 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>RailsStripeDashboard</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+    <head>
+        <title>Rails Stripe Dashboard</title>
+        <%= stylesheet_link_tag    "application", :media => "all" %>
+        <%= javascript_include_tag "application" %>
+        <%= csrf_meta_tags %>
+    </head>
+    <body>
+        <a href="https://github.com/thai510/rails-stripe-dashboard"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 1031;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-<%= yield %>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="#">Home</a></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <% if false and signed_in? %>
+                            <li class="pull-right"><a href="{% url dashboard %}">Dashboard</a></li>
+                            <li class="pull-right"><a href="{% url rebuild %}"><i class="icon-refresh icon-white" style="opacity:0.4"></i> Refresh Data</a></li>
+                            <li class="pull-right"><a href="{% url logout %}">Logout</a></li>
+                            <% else %>
+                            <form action="{% url login %}" method="post" class="navbar-search form-inline" style="margin:0"><% csrf_token %>
+                                <input type="text" class="input-small" name="username" placeholder="Email">
+                                <input type="password" class="input-small" name="password" placeholder="Password">
+                                <button type="submit" class="btn" style="margin-top:6px">Sign in</button>
+                            </form>
+                            <% end %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-</body>
+        <div class="container">
+            <% flash.each do |key, value| %>
+                <div class="alert alert-<%= key %>"><%= value %></div>
+            <% end %>
+
+            <%= yield %>
+        </div>
+    </body>
 </html>
