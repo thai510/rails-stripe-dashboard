@@ -1,4 +1,5 @@
 *.swp
 config/initializers/stripe.rb
 tmp/
+log/
 db/*.sqlite3
