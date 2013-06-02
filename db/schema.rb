@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130602212251) do
+ActiveRecord::Schema.define(:version => 20130602225024) do
 
   create_table "datasets", :force => true do |t|
     t.integer  "trialing"
@@ -25,10 +25,13 @@ ActiveRecord::Schema.define(:version => 20130602212251) do
     t.integer  "amount_charged_today"
     t.integer  "amount_refunded_today"
     t.integer  "refunds_today"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.integer  "churn"
     t.float    "churn_rate"
+    t.integer  "customer_lifetime_value"
+    t.integer  "average_monthly_revenue_per_customer"
+    t.integer  "average_monthly_revenue"
   end
 
   create_table "events", :force => true do |t|

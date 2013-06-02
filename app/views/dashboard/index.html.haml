@@ -36,7 +36,7 @@
       %h2
         $
         %span{"data-value-key" => "monthly_revenue"}
-          %small loading...
+          %small= number_to_currency(@set.average_monthly_revenue.to_f / 100)
     .well
       %h4
         Churns
@@ -55,8 +55,16 @@
     .well
       %h4
         CLV
-        %small (last 31 days)
+        %small (last 30 days)
       %h2
         $
         %span{"data-value-key" => "customer_lifetime_value"}
-          %small loading...
+          %small= number_to_currency(@set.customer_lifetime_value.to_f / 100)
+      %h4
+        Average Monthly Revenue Per Customer
+        %small (last 30 days)
+      %h2
+        $
+        %span{"data-value-key" => "average_monthly_revenue_per_customer"}
+          %small= number_to_currency(@set.average_monthly_revenue_per_customer.to_f / 100)
+        

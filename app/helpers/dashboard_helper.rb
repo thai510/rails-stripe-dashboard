@@ -4,12 +4,15 @@ module DashboardHelper
         set = updateCustomerMetrics(Dataset.new)
         set = updateChargeMetrics(set)
         set = churn(set)
+        set = customer_lifetime_value(set)
+        set = average_monthly_revenue(set)
         set.save!
     end
 
     def updateCustomerMetrics(set)
         count = 100
         offset = 0
+        set.average_monthly_revenue_per_customer = 0
         @customers = Stripe::Customer.all(:offset => offset, :count => count)
         while offset <= @customers.count
             @customers.data.each do |customer|
@@ -25,6 +28,11 @@ module DashboardHelper
                         if customer.subscription.status == 'trialing'
                             set.trialing = (set.trialing || 0) + 1
                         elsif customer.subscription.status == 'active'
+                            if customer.subscription.plan.interval == 'month'
+                                set.average_monthly_revenue_per_customer += customer.subscription.plan.amount
+                            else
+                                set.average_monthly_revenue_per_customer += customer.subscription.plan.amount / 12
+                            end
                             set.active = (set.active || 0) + 1
                         elsif customer.subscription.status == 'unpaid'
                             set.unpaid = (set.unpaid || 0) + 1
@@ -42,6 +50,8 @@ module DashboardHelper
             offset += count
             @customers = Stripe::Customer.all(:offset => offset, :count => count)
         end
+
+        set.average_monthly_revenue_per_customer /= set.active
 
         return set
     end
@@ -68,12 +78,11 @@ module DashboardHelper
 
     def churn(set)
         set.churn = churn_count_past_days
-        set.churn_rate = (set.churn > 0 ? (set.active / set.churn) : 0.0) * 100
+        set.churn_rate = (set.churn > 0 ? (set.active / set.churn) : 0.0)
         return set
     end
 
     def churn_count_past_days
-        # number of people who cancel their subscription in past 30 days
         count = 100
         offset = 0
         period_start = 30.days.ago.to_i
@@ -84,5 +93,15 @@ module DashboardHelper
             sum += 1
         end
         return sum
+    end
+
+    def customer_lifetime_value(set)
+        set.customer_lifetime_value = (set.average_monthly_revenue_per_customer.to_f / (set.churn.to_f / 100)).to_i.round
+        return set
+    end
+
+    def average_monthly_revenue(set)
+        set.average_monthly_revenue = set.active * set.average_monthly_revenue_per_customer
+        return set
     end
 end
