@@ -1,9 +1,10 @@
 module DashboardHelper
 
     def updateMetrics
-       set = updateCustomerMetrics(Dataset.new)
-       set = updateChargeMetrics(set) 
-       set.save!
+        set = updateCustomerMetrics(Dataset.new)
+        set = updateChargeMetrics(set)
+        set = churn(set)
+        set.save!
     end
 
     def updateCustomerMetrics(set)
@@ -15,8 +16,8 @@ module DashboardHelper
                 next if not customer.livemode
                 if customer.subscription
                     if customer.subscription.cancel_at_period_end
-                        if customer.subscription.status == 'trialing'      
-                            set.trialing_canceled_at_period_end = (set.trialing_canceled_at_period_end || 0) + 1         
+                        if customer.subscription.status == 'trialing'
+                            set.trialing_canceled_at_period_end = (set.trialing_canceled_at_period_end || 0) + 1
                         else
                             set.active_canceled_at_period_end = (set.active_canceled_at_period_end || 0) + 1
                         end
@@ -44,7 +45,7 @@ module DashboardHelper
 
         return set
     end
-    
+
     def updateChargeMetrics(set)
         count = 100
         offset = 0
@@ -63,5 +64,25 @@ module DashboardHelper
         end
 
         return set
+    end
+
+    def churn(set)
+        set.churn = churn_count_past_days
+        set.churn_rate = (set.churn > 0 ? (set.active / set.churn) : 0.0) * 100
+        return set
+    end
+
+    def churn_count_past_days
+        # number of people who cancel their subscription in past 30 days
+        count = 100
+        offset = 0
+        period_start = 30.days.ago.to_i
+        sum = 0
+        @events = Stripe::Event.all(:offset => offset, :count => count, :created => {:gte => period_start}, :type => 'customer.subscription.deleted').to_hash[:data].each do |event|
+            event = event.to_hash[:data].to_hash[:object].to_hash
+            next if event[:trial_end] and event[:trial_end] >= event[:canceled_at]
+            sum += 1
+        end
+        return sum
     end
 end

@@ -3,7 +3,7 @@ class DashboardController < ApplicationController
     before_filter :authenticate_user!
 
     def index
-       updateMetrics if Dataset.last.created_at.to_i < 12.hours.ago.to_i
+       updateMetrics if Dataset.count == 0 or Dataset.last.created_at.to_i < 12.hours.ago.to_i
        @set = Dataset.last
     end
 

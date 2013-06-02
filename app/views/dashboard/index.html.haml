@@ -40,17 +40,17 @@
     .well
       %h4
         Churns
-        %small (last 31 days)
+        %small (last 30 days)
       %h2
         %span{"data-value-key" => "churn_count"}
-          %small loading...
+          %small= @set.churn
     .well
       %h4
         Churn Rate
-        %small (last 31 days)
+        %small (last 30 days)
       %h2
         %span{"data-value-key" => "churn"}>
-          %small loading...
+          %small= @set.churn_rate
         \%
     .well
       %h4
