@@ -12,6 +12,7 @@ module DashboardHelper
         @customers = Stripe::Customer.all(:offset => offset, :count => count)
         while offset <= @customers.count
             @customers.data.each do |customer|
+                next if not customer.livemode
                 if customer.subscription
                     if customer.subscription.cancel_at_period_end
                         if customer.subscription.status == 'trialing'      
@@ -47,13 +48,15 @@ module DashboardHelper
     def updateChargeMetrics(set)
         count = 100
         offset = 0
-        @charges = Stripe::Charge.all(:offset => offset, :count => count, :created => {:lte => 1.day.ago.to_i})
+        @charges = Stripe::Charge.all(:offset => offset, :count => count).to_hash[:data]
         while offset <= @charges.count
-            @charges.data.each do |charge|
+            @charges.each do |charge|
+                charge = charge.to_hash
+                next if charge[:livemode] == false or charge[:created] < 1.day.ago.to_i
                 set.charges_today = (set.charges_today || 0) + 1
-                set.refunds_today = (set.refunds_today || 0) + 1 if charge.refunded
-                set.amount_charged_today = (set.amount_charged_today || 0) + charge.amount
-                set.amount_refunded_today = (set.amount_refunded_today || 0) + charge.amount_refunded
+                set.refunds_today = (set.refunds_today || 0) + 1 if charge[:refunded]
+                set.amount_charged_today = (set.amount_charged_today || 0) + charge[:amount]
+                set.amount_refunded_today = (set.amount_refunded_today || 0) + charge[:amount_refunded]
             end
             offset += count
             @charges = Stripe::Charge.all(:offset => offset, :count => count)

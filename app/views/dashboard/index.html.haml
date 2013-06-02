@@ -25,9 +25,9 @@
         Charges
         %small= "(As of #{Time.at(@set.created_at)})"
       %h2
-        $
         %span{"data-value-key" => "monthly_revenue"}
           %small= "Charges Today: #{@set.charges_today || 0}" 
+          %br
           %small= "Amount Charged Today: #{number_to_currency(@set.amount_charged_today.to_f / 100) || 0}"
     .well
       %h4
