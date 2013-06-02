@@ -47,7 +47,7 @@ module DashboardHelper
     def updateChargeMetrics(set)
         count = 100
         offset = 0
-        @charges = Stripe::Charge.all(:offset => offset, :count => count, :created => {:gte => 1.day.ago.to_i})
+        @charges = Stripe::Charge.all(:offset => offset, :count => count, :created => {:lte => 1.day.ago.to_i})
         while offset <= @charges.count
             @charges.data.each do |charge|
                 set.charges_today = (set.charges_today || 0) + 1
