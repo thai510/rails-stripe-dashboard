@@ -1,9 +1,10 @@
-%html
-  %head
-    = javascript_include_tag "dashboard"
+-content_for :head do
+  = javascript_include_tag "dashboard"
 .row
   .span8
-    #chart
+    #chart-container
+      #y-axis
+      #chart
     \ 
   .span4
     .well
