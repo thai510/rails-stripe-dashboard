@@ -7,23 +7,22 @@
       #chart
     \ 
   .span4
-    .well
-      %h4
+    %ul.nav.nav-list
+      %li.nav-header
         Customers
         %small= "(As of #{Time.at(@set.created_at)})"
-      %h2
-        %span{"data-value-key" => "paying_customers"}
-          %small{"data-value-key" => "active"}= "Active: #{@set.active || 0}"
-          %br
-          %small{"data-value-key" => "trialing"}= "Trialing: #{@set.trialing || 0}"
-          %br
-          %small{"data-value-key" => "unpaid"}= "Unpaid: #{@set.unpaid || 0}"
-          %br
-          %small{"data-value-key" => "past_due"}= "Past Due: #{@set.past_due || 0}"
-          %br
-          %small{"data-value-key" => "active_canceled_at_period_end"}= "Canceling at Period End (Active): #{@set.active_canceled_at_period_end || 0}"
-          %br
-          %small{"data-value-key" => "trialing_canceled_at_period_end"}= "Canceling at Period End (Trialing): #{@set.trialing_canceled_at_period_end || 0}"
+      %li{"data-value-key" => "active", 'class' => if params.has_key? 'active' and params['active'].include? 'active' then 'active' else '' end}
+        %a= "Active: #{@set.active || 0}"
+      %li{"data-value-key" => "trialing", 'class' => if params.has_key? 'active' and params['active'].include? 'trialing' then 'active' else '' end}
+        %a= "Trialing: #{@set.trialing || 0}"
+      %li{"data-value-key" => "unpaid", 'class' => if params.has_key? 'active' and params['active'].include? 'unpaid' then 'active' else '' end}
+        %a= "Unpaid: #{@set.unpaid || 0}"
+      %li{"data-value-key" => "past_due", 'class' => if params.has_key? 'active' and params['active'].include? 'past_due' then 'active' else '' end}
+        %a= "Past Due: #{@set.past_due || 0}"
+      %li{"data-value-key" => "active_canceled_at_period_end", 'class' => if params.has_key? 'active' and params['active'].include? 'active_canceled_at_period_end' then 'active' else '' end}
+        %a= "Canceling at Period End (Active): #{@set.active_canceled_at_period_end || 0}"
+      %li{"data-value-key" => "trialing_canceled_at_period_end", 'class' => if params.has_key? 'active' and params['active'].include? 'trialing_canceled_at_period_end' then 'active' else '' end}
+        %a= "Canceling at Period End (Trialing): #{@set.trialing_canceled_at_period_end || 0}"
     .well
       %h4
         Charges
