@@ -15,4 +15,22 @@ class DashboardController < ApplicationController
             $isRunningUpdate = false
         end
     end
+
+    def graph_data
+        respond_to do |format|
+            format.json { render :json => 
+                (params[:which].collect do |w|
+                    {
+                        name: w,
+                        data: Dataset.last(30).collect do |d|
+                            {
+                                x: d.created_at.to_i,
+                                y: d[w]
+                            }
+                        end
+                    }
+                end)
+            }
+        end
+    end
 end

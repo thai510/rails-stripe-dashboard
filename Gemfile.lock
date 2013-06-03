@@ -107,6 +107,8 @@ GEM
     ref (1.0.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rickshaw_rails (1.2.0)
+      railties (>= 3.1.0)
     sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -156,6 +158,7 @@ DEPENDENCIES
   pg
   rack-mini-profiler
   rails (= 3.2.11)
+  rickshaw_rails
   sass-rails (~> 3.2.3)
   sqlite3
   stripe
