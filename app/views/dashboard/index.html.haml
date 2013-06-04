@@ -1,5 +1,10 @@
 -content_for :head do
   = javascript_include_tag "dashboard"
+  :css
+    .rickshaw_graph .detail .x_label { display: none }
+    .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
+    .detail_swatch { float: right; display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }
+    .rickshaw_graph .detail .date { color: #a0a0a0 }
 .row
   .span8
     #chart-container
@@ -43,11 +48,11 @@
         Conversions
         %small (last 30 days)
       %li{"data-value-key" => "converted", 'class' => if params.has_key? 'active' and params['active'].include? 'converted' then 'active' else '' end}
-        %a= "Conversions: #{@set.converted}"
+        %a= "Conversions: #{@set.converted}" unless @set.converted.nil?
       %li{"data-value-key" => "failed_to_convert", 'class' => if params.has_key? 'active' and params['active'].include? 'failed_to_convert' then 'active' else '' end}
-        %a= "Failed to Convert: #{@set.failed_to_convert}"
+        %a= "Failed to Convert: #{@set.failed_to_convert}" unless @set.failed_to_convert.nil?
       %li{"data-value-key" => "conversion_rate", 'class' => if params.has_key? 'active' and params['active'].include? 'conversion_rate' then 'active' else '' end}
-        %a= "Conversion Rate: #{(@set.converted.to_f / (@set.failed_to_convert.to_f + @set.converted.to_f) * 100).round}%"
+        %a= "Conversion Rate: #{(@set.converted.to_f / (@set.failed_to_convert.to_f + @set.converted.to_f) * 100).round}%" unless @set.converted.nil? or @set.failed_to_convert.nil?
       %li.nav-header
         CLV
         %small (last 30 days)
@@ -57,4 +62,4 @@
         Average Monthly Revenue Per Customer
         %small (last 30 days)
       %li{"data-value-key" => "average_monthly_revenue_per_customer", 'class' => if params.has_key? 'active' and params['active'].include? 'average_monthly_revenue_per_customer' then 'active' else '' end}
-        %a= number_to_currency(@set.average_monthly_revenue_per_customer.to_f / 100)
+        %a= number_to_currency(@set.average_monthly_revenue_per_customer.to_f / 100) unless @set.average_monthly_revenue_per_customer.nil?

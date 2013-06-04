@@ -48,6 +48,13 @@ updateGraph =
           tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
           element: $('#y-axis')[0]
         }
+        hover_detail = new Rickshaw.Graph.HoverDetail {
+          graph: graph,
+          formatter: (s, x, y)->
+            date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>'
+            swatch = '<span class="detail_swatch" style="background-color: ' + s.color + '"></span>'
+            swatch + s.name + ': ' + parseInt(y) + '<br/>' + date
+        }
         do graph.render
     else
       graph = null
