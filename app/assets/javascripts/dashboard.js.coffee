@@ -3,6 +3,11 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 graph = null
 
+updateNavHeaders =
+  ->
+    $('.nav-header').each (i,v)->
+      $(v).toggleClass 'active', $(v).nextUntil('.nav-header').hasClass('active')
+
 redrawGraph =
   ->
     if graph?
@@ -52,8 +57,16 @@ $(window).resize(redrawGraph)
 
 $(document).delegate '[data-value-key]', 'click', ->
   $(this).toggleClass 'active'
+  do updateNavHeaders
   do updateGraph
 
-$(document).ready -> do updateGraph
+$(document).delegate 'li.nav-header', 'click', ->
+  $(this).toggleClass 'active'
+  $(this).nextUntil('.nav-header').toggleClass 'active', $(this).hasClass 'active'
+  do updateGraph
+
+$(document).ready ->
+  do updateGraph
+  do updateNavHeaders
 
 # vim: sw=2 ts=2
