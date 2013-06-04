@@ -2,7 +2,25 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$yAxisWidth: 30px;
+
 #user_nav {
   float: right;
   padding:10px;
+}
+
+#chart-container {
+  position: fixed;
+}
+
+#y-axis {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: $yAxisWidth;
+}
+
+#chart {
+  position: relative;
+  left: $yAxisWidth;
 }

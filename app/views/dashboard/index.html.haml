@@ -1,86 +1,61 @@
-%html
-  %head
-    = javascript_include_tag "dashboard"
+-content_for :head do
+  = javascript_include_tag "dashboard"
 .row
   .span8
-    #chart
+    #chart-container
     \ 
   .span4
-    .well
-      %h4
+    %ul.nav.nav-list
+      %li.nav-header
         Customers
         %small= "(As of #{Time.at(@set.created_at)})"
-      %h2
-        %span{"data-value-key" => "paying_customers"}
-          %small{"data-value-key" => "active"}= "Active: #{@set.active || 0}"
-          %br
-          %small{"data-value-key" => "trialing"}= "Trialing: #{@set.trialing || 0}"
-          %br
-          %small{"data-value-key" => "unpaid"}= "Unpaid: #{@set.unpaid || 0}"
-          %br
-          %small{"data-value-key" => "past_due"}= "Past Due: #{@set.past_due || 0}"
-          %br
-          %small{"data-value-key" => "active_canceled_at_period_end"}= "Canceling at Period End (Active): #{@set.active_canceled_at_period_end || 0}"
-          %br
-          %small{"data-value-key" => "trialing_canceled_at_period_end"}= "Canceling at Period End (Trialing): #{@set.trialing_canceled_at_period_end || 0}"
-    .well
-      %h4
+      %li{"data-value-key" => "active", 'class' => if params.has_key? 'active' and params['active'].include? 'active' then 'active' else '' end}
+        %a= "Active: #{@set.active || 0}"
+      %li{"data-value-key" => "trialing", 'class' => if params.has_key? 'active' and params['active'].include? 'trialing' then 'active' else '' end}
+        %a= "Trialing: #{@set.trialing || 0}"
+      %li{"data-value-key" => "unpaid", 'class' => if params.has_key? 'active' and params['active'].include? 'unpaid' then 'active' else '' end}
+        %a= "Unpaid: #{@set.unpaid || 0}"
+      %li{"data-value-key" => "past_due", 'class' => if params.has_key? 'active' and params['active'].include? 'past_due' then 'active' else '' end}
+        %a= "Past Due: #{@set.past_due || 0}"
+      %li{"data-value-key" => "active_canceled_at_period_end", 'class' => if params.has_key? 'active' and params['active'].include? 'active_canceled_at_period_end' then 'active' else '' end}
+        %a= "Canceling at Period End (Active): #{@set.active_canceled_at_period_end || 0}"
+      %li{"data-value-key" => "trialing_canceled_at_period_end", 'class' => if params.has_key? 'active' and params['active'].include? 'trialing_canceled_at_period_end' then 'active' else '' end}
+        %a= "Canceling at Period End (Trialing): #{@set.trialing_canceled_at_period_end || 0}"
+      %li.nav-header
         Charges
         %small= "(As of #{Time.at(@set.created_at)})"
-      %h2
-        %span{"data-value-key" => "monthly_revenue"}
-          %small{"data-value-key" => "charges_today"}= "Charges Today: #{@set.charges_today || 0}" 
-          %br
-          %small{"data-value-key" => "amount_charged_today"}= "Amount Charged Today: #{number_to_currency(@set.amount_charged_today.to_f / 100) || 0}"
-    .well
-      %h4
+      %li{"data-value-key" => "charges_today", 'class' => if params.has_key? 'active' and params['active'].include? 'charges_today' then 'active' else '' end}
+        %a= "Charges Today: #{@set.charges_today || 0}" 
+      %li{"data-value-key" => "amount_charged_today", 'class' => if params.has_key? 'active' and params['active'].include? 'amount_charged_today' then 'active' else '' end}
+        %a= "Amount Charged Today: #{number_to_currency(@set.amount_charged_today.to_f / 100) || 0}"
+      %li.nav-header
         Monthly Revenue
         %small (projected)
-      %h2
-        $
-        %span{"data-value-key" => "monthly_revenue"}
-          %small{"data-value-key" => "average_monthly_revenue"}= number_to_currency(@set.average_monthly_revenue.to_f / 100)
-    .well
-      %h4
-        Churns
+      %li{"data-value-key" => "average_monthly_revenue", 'class' => if params.has_key? 'active' and params['active'].include? 'average_monthly_revenue' then 'active' else '' end}
+        %a= number_to_currency(@set.average_monthly_revenue.to_f / 100)
+      %li.nav-header
+        Churn
         %small (last 30 days)
-      %h2
-        %span{"data-value-key" => "churn_count"}
-          %small{"data-value-key" => "churn"}= @set.churn
-    .well
-      %h4
-        Churn Rate
-        %small (last 30 days)
-      %h2
-        %span{"data-value-key" => "churn"}>
-          %small{"data-value-key" => "churn_rate"}= @set.churn_rate
-        \%
-    .well
-      %h4
+      %li{"data-value-key" => "churn", 'class' => if params.has_key? 'active' and params['active'].include? 'churn' then 'active' else '' end}
+        %a= "Count: #{@set.churn}"
+      %li{"data-value-key" => "churn_rate", 'class' => if params.has_key? 'active' and params['active'].include? 'churn_rate' then 'active' else '' end}
+        %a= "Rate: #{@set.churn_rate} %"
+      %li.nav-header
         Conversions
         %small (last 30 days)
-      %h2
-        %span{"data-value-key" => "converted_count"}
-          %small{"data-value-key" => "converted"}= "Conversions: #{@set.converted}"
-        %br
-        %span{"data-value-key" => "failed_to_convert"}
-          %small{"data-value-key" => "failed_to_convert"}= "Failed to Convert: #{@set.failed_to_convert}"
-        %br
-        %span{"data-value-key" => "conversion_rate"}
-          %small{"data-value-key" => "conversion_rate"}= "Conversion Rate: #{(@set.converted.to_f / (@set.failed_to_convert.to_f + @set.converted.to_f) * 100).round}%"
-    .well
-      %h4
+      %li{"data-value-key" => "converted", 'class' => if params.has_key? 'active' and params['active'].include? 'converted' then 'active' else '' end}
+        %a= "Conversions: #{@set.converted}"
+      %li{"data-value-key" => "failed_to_convert", 'class' => if params.has_key? 'active' and params['active'].include? 'failed_to_convert' then 'active' else '' end}
+        %a= "Failed to Convert: #{@set.failed_to_convert}"
+      %li{"data-value-key" => "conversion_rate", 'class' => if params.has_key? 'active' and params['active'].include? 'conversion_rate' then 'active' else '' end}
+        %a= "Conversion Rate: #{(@set.converted.to_f / (@set.failed_to_convert.to_f + @set.converted.to_f) * 100).round}%"
+      %li.nav-header
         CLV
         %small (last 30 days)
-      %h2
-        $
-        %span{"data-value-key" => "customer_lifetime_value"}
-          %small{"data-value-key" => "customer_lifetime_value"}= number_to_currency(@set.customer_lifetime_value.to_f / 100)
-      %h4
+      %li{"data-value-key" => "customer_lifetime_value", 'class' => if params.has_key? 'active' and params['active'].include? 'customer_lifetime_value' then 'active' else '' end}
+        %a= number_to_currency(@set.customer_lifetime_value.to_f / 100)
+      %li.nav-header
         Average Monthly Revenue Per Customer
         %small (last 30 days)
-      %h2
-        $
-        %span{"data-value-key" => "average_monthly_revenue_per_customer"}
-          %small{"data-value-key" => "average_monthly_revenue_per_customer"}= number_to_currency(@set.average_monthly_revenue_per_customer.to_f / 100)
-        
+      %li{"data-value-key" => "average_monthly_revenue_per_customer", 'class' => if params.has_key? 'active' and params['active'].include? 'average_monthly_revenue_per_customer' then 'active' else '' end}
+        %a= number_to_currency(@set.average_monthly_revenue_per_customer.to_f / 100)
