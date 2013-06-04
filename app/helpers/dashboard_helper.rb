@@ -6,6 +6,7 @@ module DashboardHelper
         set = churn(set)
         set = customer_lifetime_value(set)
         set = average_monthly_revenue(set)
+        set = conversions(set)
         set.save!
     end
 
@@ -87,12 +88,44 @@ module DashboardHelper
         offset = 0
         period_start = 30.days.ago.to_i
         sum = 0
-        @events = Stripe::Event.all(:offset => offset, :count => count, :created => {:gte => period_start}, :type => 'customer.subscription.deleted').to_hash[:data].each do |event|
-            event = event.to_hash[:data].to_hash[:object].to_hash
-            next if event[:trial_end] and event[:trial_end] >= event[:canceled_at]
-            sum += 1
+        @events = Stripe::Event.all(:offset => offset, :count => count, :created => {:gte => period_start}, :type => 'customer.subscription.deleted')        
+        while (offset <= @events.count)
+            @events.to_hash[:data].each do |event|
+                event = event.to_hash[:data].to_hash[:object].to_hash
+                next if event[:trial_end] and event[:trial_end] >= event[:canceled_at]
+                sum += 1
+            end
+            offset += count
+            @events = Stripe::Event.all(:offset => offset, :count => count, :created => {:gte => period_start}, :type => 'customer.subscription.deleted')
         end
         return sum
+    end
+
+    def conversions(set)
+        count = 100
+        offset = 0
+        period_start = 30.days.ago.to_i
+        @events = Stripe::Event.all(:offset => offset, :count => count, :created => {:gte => period_start})
+        while offset <= @events.count
+            @events.to_hash[:data].each do |event|
+                type = event.to_hash[:type]
+                event = event.to_hash[:data].to_hash
+                if type == 'customer.subscription.created' and event[:object].to_hash[:status] == 'active'
+                    set.converted = (set.converted || 0) + 1
+                elsif type == 'customer.subscription.updated' and event[:object].to_hash[:status] == 'active' and event[:previous_attributes].to_hash[:status] == 'trialing'
+                    set.converted = (set.converted || 0) + 1
+                elsif type == 'customer.subscription.deleted' and within_24_hours(event[:object].to_hash[:ended_at], event[:object].to_hash[:trial_end])
+                    set.failed_to_convert = (set.failed_to_convert || 0) + 1
+                end
+            end
+            offset += count
+            @events = Stripe::Event.all(:offset => offset, :count => count, :created => {:gte => period_start})
+        end
+        return set
+    end
+
+    def within_24_hours(timestamp1, timestamp2)
+        return ((timestamp1 and timestamp2 and (timestamp1 - timestamp2).to_i.abs <= 86400) or (timestamp1 and timestamp2.nil?))
     end
 
     def customer_lifetime_value(set)

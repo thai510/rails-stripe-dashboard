@@ -57,6 +57,19 @@
         \%
     .well
       %h4
+        Conversions
+        %small (last 30 days)
+      %h2
+        %span{"data-value-key" => "converted_count"}
+          %small{"data-value-key" => "converted"}= "Conversions: #{@set.converted}"
+        %br
+        %span{"data-value-key" => "failed_to_convert"}
+          %small{"data-value-key" => "failed_to_convert"}= "Failed to Convert: #{@set.failed_to_convert}"
+        %br
+        %span{"data-value-key" => "conversion_rate"}
+          %small{"data-value-key" => "conversion_rate"}= "Conversion Rate: #{(@set.converted.to_f / (@set.failed_to_convert.to_f + @set.converted.to_f) * 100).round}%"
+    .well
+      %h4
         CLV
         %small (last 30 days)
       %h2

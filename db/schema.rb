@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130602225024) do
+ActiveRecord::Schema.define(:version => 20130603204223) do
 
   create_table "datasets", :force => true do |t|
     t.integer  "trialing"
@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(:version => 20130602225024) do
     t.integer  "customer_lifetime_value"
     t.integer  "average_monthly_revenue_per_customer"
     t.integer  "average_monthly_revenue"
+    t.integer  "converted"
+    t.integer  "failed_to_convert"
   end
 
   create_table "events", :force => true do |t|
